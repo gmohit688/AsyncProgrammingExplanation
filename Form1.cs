@@ -14,43 +14,48 @@ namespace AsyncProgrammingExplanation
             listBox1.DataSource = null;  // Remove the binding
             listBox1.DataSource = messages;
         }
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             LogMessage("Started Tasks");
 
-            string clothes = WashClothes();
-            DryClothes(clothes);
-            CleanHouse();
-            CookFood();
+            Task task1 = WashAndDryClothes();
+            Task task2 = CleanHouse();
+            Task task3 = CookFood();
 
+            await Task.WhenAll(task1, task2, task3);
             LogMessage("Completed Tasks");
         }
+        private async Task WashAndDryClothes()
+        {
+            string clothes = await WashClothes();
+            DryClothes(clothes);
+        }
 
-        private void CookFood()
+        private async Task CookFood()
         {
             LogMessage("Started Cooking Food");
-            Task.Delay(2000).Wait();
+            await Task.Delay(2000);
             LogMessage("Completed Cooking Food");
         }
 
-        private void CleanHouse()
+        private async Task CleanHouse()
         {
             LogMessage("Started Cleaning House");
-            Task.Delay(2000).Wait();
+            await Task.Delay(2000);
             LogMessage("Completed Cleaning House");
         }
 
-        private void DryClothes(string clothes)
+        private async Task DryClothes(string clothes)
         {
             LogMessage("Drying Clothes");
-            Task.Delay(1000).Wait();
+            await Task.Delay(1000);
             LogMessage("Completed Drying Clothes");
         }
 
-        private string WashClothes()
+        private async Task<string> WashClothes()
         {
             LogMessage("Washing Clothes");
-            Task.Delay(1000).Wait();
+            await Task.Delay(1000);
             LogMessage("Completed Washing Colthes");
             return "Wet Clothes";
         }
